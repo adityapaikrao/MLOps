@@ -93,3 +93,9 @@ venv/
 
 # temporary files
 ignore.txt
+
+# model files
+models/
+*.pkl
+reports/
+
