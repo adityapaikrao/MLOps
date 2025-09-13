@@ -71,6 +71,7 @@ def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame, data_path: str)
         raise
 
 def main():
+    print(os.getenv("TEST_SECRET"))
     try:
         params = load_params(params_path='params.yaml')
         test_size = params['data_ingestion']['test_size']
