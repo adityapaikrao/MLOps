@@ -90,3 +90,6 @@ target/
 
 # virtual environment
 venv/
+
+# temporary files
+ignore.txt
