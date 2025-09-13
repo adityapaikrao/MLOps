@@ -56,19 +56,34 @@ def register_model(model_name: str, model_info: dict):
     """Register the model to the MLflow Model Registry."""
     try:
         model_uri = f"runs:/{model_info['run_id']}/{model_info['model_path']}"
+        logging.info(f'Registering model from URI: {model_uri}')
         
         # Register the model
         model_version = mlflow.register_model(model_uri, model_name)
+        logging.info(f'Model {model_name} version {model_version.version} registered successfully.')
         
         # Transition the model to "Staging" stage
         client = mlflow.tracking.MlflowClient()
-        client.transition_model_version_stage(
-            name=model_name,
-            version=model_version.version,
-            stage="Staging"
-        )
+        logging.info(f'Attempting to transition model {model_name} version {model_version.version} to Staging...')
         
-        logging.debug(f'Model {model_name} version {model_version.version} registered and transitioned to Staging.')
+        try:
+            transition_result = client.transition_model_version_stage(
+                name=model_name,
+                version=model_version.version,
+                stage="Staging"
+            )
+            logging.info(f'Successfully transitioned model {model_name} version {model_version.version} to Staging stage.')
+            logging.info(f'Transition result: {transition_result}')
+        except Exception as transition_error:
+            logging.error(f'Failed to transition model to Staging: {transition_error}')
+            # Let's try to get the current model version details
+            try:
+                model_version_details = client.get_model_version(name=model_name, version=model_version.version)
+                logging.info(f'Current model version stage: {model_version_details.current_stage}')
+            except Exception as detail_error:
+                logging.error(f'Could not retrieve model version details: {detail_error}')
+            raise transition_error
+        
     except Exception as e:
         logging.error('Error during model registration: %s', e)
         raise
