@@ -77,7 +77,7 @@ jobs:
 
       - name: Push Docker image to ECR
         run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
       
       - name: Set Up kubectl
         uses: azure/setup-kubectl@v3
