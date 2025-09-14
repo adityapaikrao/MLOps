@@ -5,4 +5,5 @@ mlflow_skinny==2.19.0
 nltk==3.9.1
 numpy==2.2.1
 pandas==2.2.3
+dotenv==0.9.9
 prometheus_client
